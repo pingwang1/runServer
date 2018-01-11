@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Title</title>
+    <style type="text/css">
+    	#input{
+    		width: 400px;
+            height: 400px;
+            /*background-color: #2aabd2;*/
+            margin-left:100px ;
+            margin-top: 100px;
+            border: 1px solid red;
+            display: block;
+            float: left;
+    	}
+    	#output{
+    		width: 400px;
+    		height: 400px;
+    		margin-right:100px ;
+            margin-top: 100px;
+    		border: 1px solid red;
+    		float: right;
+    	}
+    	textarea{
+    		margin: 20px;
+    		width:350px;
+    		height: 300px;
+    		overflow: visible;
+    	}
+    	button{
+    		border:none;
+    		height: 30px;
+    		width: 80px;
+    		border: 1px solid black;
+    		margin-left:300px ;
+    		margin-top:15px ;
+
+    	}
+    	a{
+    		padding: 5px;
+    		border: 1px solid black;
+    		text-decoration: none;
+    		margin-left:20px ;
+    	}
+    	a:hover{
+    		background-color: #00CCFF;
+    	}
+    </style>
+    <script src="js/jquery-3.2.1.js"></script>
+    <script>
+    	//在DOM结构绘制完毕后执行相应的操作，相当于window.onload=function(){};
+    	$(document).ready(function(){
+    		$("#submit").click(function(){
+				//获取textarea input内容
+				var obj = $(".input").val()
+				console.log(typeof(obj))
+				//Ajax
+				var request=new XMLHttpRequest();
+//				只允许本机127.0.0.1:8080
+				request.open("POST","http://localhost:8080");
+//                设定为服务器的ip就可以访问了
+//                request.open("POST","http://192.168.16.57:8080");
+				request.addEventListener("readystatechange",loadHandler);
+//                var line = "POST /test.html 200 ok\r\n"
+//                var headers = "Content-Type:text/html; charset=utf-8\r\n"
+//                var rend_data = line + headers +"\r\n"+obj
+				var rend_data = obj
+    			request.send(rend_data);
+//  			响应数据
+    			function loadHandler(e) {
+            		e=e || window.event;
+//            		console.log("request"+request)
+            		console.log("request_response"+request.response)
+//					取到消息
+					$(".output").val(request.response)
+
+        		}
+			});
+    	});
+    </script>
+	</head>
+	<body>
+		<div id="input">
+			<button id="submit">提交</button>
+			<br />
+			<textarea class="input"></textarea>
+		</div>
+		<div id="output"><br />
+			<a id="run" href="#">运行结果</a><br />
+			<textarea class="output"></textarea>
+		</div>
+	</body>
+</html>
